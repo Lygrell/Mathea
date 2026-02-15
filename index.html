@@ -673,7 +673,7 @@
       const [goals, setGoals] = useState(() => {
         const saved = localStorage.getItem('dailyCheckGoals');
         return saved ? JSON.parse(saved) : {
-          calories: 2000, protein: 130, workout: 30, pushups: 50, plank: 60,
+          calories: 2000, protein: 130, workout: 30, pushups: 5, plank: 60,
           calorieZone: 300, goldMultiplier: 1.5,
           calorieBurn: { run: 10, strength: 6, padel: 8 }
         };
