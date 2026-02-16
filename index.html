@@ -175,7 +175,11 @@
       }, [tempMeal, setToday, setTempMeal]);
 
       const handleAddWorkout = useCallback(() => {
-        const caloriesBurned = tempWorkout.duration * goals.calorieBurn[tempWorkout.type];
+        // Intensity multipliers: low = 0.75 (25% lower), moderate = 1.0, high = 1.4 (40% higher)
+        const intensityMultipliers = { low: 0.75, moderate: 1.0, high: 1.4 };
+        const baseCalories = tempWorkout.duration * goals.calorieBurn[tempWorkout.type];
+        const caloriesBurned = Math.round(baseCalories * intensityMultipliers[tempWorkout.intensity]);
+        
         setToday(prev => ({
           ...prev,
           workouts: [...prev.workouts, { ...tempWorkout, calories: caloriesBurned }],
