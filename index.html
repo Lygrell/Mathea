@@ -158,6 +158,10 @@
     // HomePage component - OUTSIDE DailyCheck for better performance
     const HomePage = memo(({ today, setToday, goals, tempMeal, setTempMeal, tempWorkout, setTempWorkout }) => {
       
+      // Calculate total calories burned from today's workouts
+      const caloriesBurned = today.workouts.reduce((sum, workout) => sum + (workout.calories || 0), 0);
+      const adjustedCalorieGoal = goals.calories + caloriesBurned;
+      
       const handleAddMeal = useCallback(() => {
         if (tempMeal.calories > 0 || tempMeal.protein > 0) {
           setToday(prev => ({
@@ -184,7 +188,7 @@
           {/* Status Circles */}
           <div style={{ backgroundColor: 'white', borderRadius: '24px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
-              <StatusCircle label="Kcal" value={today.calories} goal={goals.calories} type="calories" goldMultiplier={goals.goldMultiplier} />
+              <StatusCircle label="Kcal" value={today.calories} goal={adjustedCalorieGoal} type="calories" goldMultiplier={goals.goldMultiplier} />
               <StatusCircle label="Protein" value={today.protein} goal={goals.protein} type="protein" goldMultiplier={goals.goldMultiplier} />
               <StatusCircle label="Trening" value={today.workoutMinutes} goal={goals.workout} goldMultiplier={goals.goldMultiplier} />
             </div>
@@ -673,7 +677,7 @@
       const [goals, setGoals] = useState(() => {
         const saved = localStorage.getItem('dailyCheckGoals');
         return saved ? JSON.parse(saved) : {
-          calories: 2000, protein: 130, workout: 30, pushups: 5, plank: 60,
+          calories: 2000, protein: 130, workout: 30, pushups: 50, plank: 60,
           calorieZone: 300, goldMultiplier: 1.5,
           calorieBurn: { run: 10, strength: 6, padel: 8 }
         };
